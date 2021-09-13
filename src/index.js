@@ -4,22 +4,28 @@ import { assignMines } from "./Minesweeper";
 
 import "./styles.css";
 
-//
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
+function isBomb(cellNum) {
+  return cellNum === 9;
 }
-
-function App() {
+function MinesweeperUI() {
   // const [grid, setGrid]= useState([[]])
 
-  // console.table(assignMines(4, 5, 5));
+  const board = assignMines(4, 5, 5);
+  const gameBoard = board.map((row) => (
+    <div className="row">
+      {row.map((box) => (
+        <div className={`box`}>{box}</div>
+      ))}
+    </div>
+  ));
+
   return (
     <div className="App">
       <h1>Minesweeper</h1>
+      <div className="gameBoard">{gameBoard}</div>
     </div>
   );
 }
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+ReactDOM.render(<MinesweeperUI />, rootElement);
