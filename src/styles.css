@@ -7,6 +7,8 @@
 }
 
 .box {
+  width: 50px;
+  height: 50px;
   background-color: #d9d9d9;
   border: 2px solid black;
 }
@@ -18,7 +20,7 @@
 
 .isHidden {
   /* can show : flag or nothing  */
-  color: black;
+  background: black;
 }
 
 /* when isRevealed */
