@@ -22,7 +22,7 @@ function getRandomInt(max) {
   
   */
   
-  const box = (i, j, rows, columns) => {
+  const adiacentBoxIndexesInsideGrid = (i, j, rows, columns) => {
     let arrOfIndexesInsideGrid = [
       //first line
       [i - 1, j - 1],
@@ -74,7 +74,7 @@ function getRandomInt(max) {
         //if j=0 or j=coln //missing left or rignt
         // (i,j, rows, columns) => [valid box elements] => filter (i,j => g[i][j] ===)
   
-        g[i][j] = box(i, j, rows, colums).filter(
+        g[i][j] = adiacentBoxIndexesInsideGrid(i, j, rows, colums).filter(
           (e) => g[e[0]][e[1]] === 9
         ).length;
       }
