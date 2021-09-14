@@ -1,3 +1,5 @@
+import { clearLine } from "readline";
+
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
@@ -10,8 +12,12 @@ function getRandomInt(max) {
     REVEALED = "reveal"
   } 
   
-  function isBomb(cell) {
+  export function isBomb(cell) {
     return cell.value === TileStatus.MINE;
+  }
+
+  export function isRevealed(cell){
+    return cell.hidden===TileStatus.REVEALED
   }
   
   /*

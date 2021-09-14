@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { generateGrid, TileStatus } from "./Minesweeper";
+import { generateGrid, isBomb,isRevealed, TileStatus } from "./Minesweeper";
 
 import "./styles.css";
 
@@ -12,6 +12,7 @@ const MINES = 4;
 function MinesweeperUI() {
   //expensive initial state
   const [grid, setGrid] = useState(() => generateGrid(MINES, ROWS, COLUMS));
+  const [gameOver, setGameOver]= useState(false);
 
   console.log(grid);
   const handleChange = (row, column, event) => {
@@ -21,15 +22,27 @@ function MinesweeperUI() {
     setGrid(copy);
   };
 
+  const sayGameOver=()=>{
+    alert("game over")
+    setGameOver(true) //revealBoard
+  }
+
   const gameBoard = grid.map((row, rowIndex) => (
     <div key={rowIndex} className="row">
       {row.map((box, columnIndex) => (
         <div
-          className={`box`}
+          className={"box" }
           key={columnIndex}
-          onClick={(e) => handleChange(rowIndex, columnIndex, e)}
+          onClick={(e) => {
+            
+            if(isBomb(box)) 
+             { sayGameOver() }
+             
+            if(!gameOver)
+            { handleChange(rowIndex, columnIndex, e);}
+          }}
         >
-          {box.hidden === TileStatus.HIDDEN
+          {!gameOver && box.hidden === TileStatus.HIDDEN 
             ? box.hidden
             : box.value}
         </div>
