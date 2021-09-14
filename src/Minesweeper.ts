@@ -9,7 +9,8 @@ function getRandomInt(max) {
     HIDDEN = "hidden",
     NUMBER = "number",
     MINE = 9,
-    REVEALED = "reveal"
+    REVEALED = "reveal",
+    MARKED = "flag"
   } 
   
   export function isBomb(cell) {
@@ -20,6 +21,13 @@ function getRandomInt(max) {
     return cell.hidden===TileStatus.REVEALED
   }
   
+  export function isHidden(cell){
+    return cell.hidden===TileStatus.HIDDEN
+  }
+
+  export function isEmpty(cell){
+    return cell.value===TileStatus.EMPTY
+  }
   /*
     FIRST PART -- LOGIC
     1.Populate board -- bombs
@@ -35,7 +43,7 @@ function getRandomInt(max) {
     
     */
   
-  const adiacentBoxIndexesInsideGrid = (i, j, rows, columns) => {
+  export const adiacentBoxIndexesInsideGrid = (i, j, rows, columns) => {
     let arrOfIndexesInsideGrid = [
       //first line
       {x: i - 1, y: j},
@@ -101,3 +109,4 @@ function getRandomInt(max) {
       //if game over -- reveal board
 
   }
+ 
