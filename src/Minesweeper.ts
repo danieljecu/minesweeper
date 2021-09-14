@@ -52,21 +52,14 @@ function getRandomInt(max) {
   
   export function generateGrid(minesCount = 3, rows = 5, colums = 5) {
     //generate grid
-    //calc adiacentBox 
     let g = [];
-    // Array.from({ length: rows }, () =>
-    //   Array.from({ length: columns }, (v,i) => { value: 0 , hidden: TileStatus.HIDDEN })
-    // );
+
     for (let i = 0; i < rows; i++) {
       g[i] = Array.from({ length: colums }, (v,i) => ({ value: 0 , hidden: TileStatus.HIDDEN }));
     }
 
-  
-
     let minesAssigned = 0;
     while (minesAssigned < minesCount) {
-      //mines 3
-      // console.table(g, "mines", minesAssigned);
       const x = getRandomInt(rows);
       const y = getRandomInt(colums);
       if (g[x][y].value !== TileStatus.MINE) {
@@ -75,22 +68,19 @@ function getRandomInt(max) {
       }
     }  
 
-    //precalculate nhood for non bombs CELLs
+    //calc adiacentBox for non bombs CELLs
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < colums; j++) {
         if (isBomb(g[i][j])) {
           break;
         }
-   
         // (i,j, rows, columns) => [valid box elements] => filter (i,j => isBomb(g[i][j]))
         //filter box indexes outside of the array
-
         g[i][j].value = adiacentBoxIndexesInsideGrid(i, j, rows, colums) 
         // get only the mines 
         .filter(({x,y}) =>
           isBomb(g[x][y])
         ).length
-
       }
     }
   
