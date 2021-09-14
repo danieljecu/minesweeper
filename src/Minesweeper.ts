@@ -7,11 +7,11 @@ function getRandomInt(max) {
     HIDDEN = "hidden",
     NUMBER = "number",
     MINE = 9,
-    REVEAL = "reveal"
+    REVEALED = "reveal"
   } 
   
   function isBomb(cell) {
-    return cell === TileStatus.MINE;
+    return cell.value === TileStatus.MINE;
   }
   
   /*
@@ -32,61 +32,76 @@ function getRandomInt(max) {
   const adiacentBoxIndexesInsideGrid = (i, j, rows, columns) => {
     let arrOfIndexesInsideGrid = [
       //first line
-      [i - 1, j - 1],
-      [i - 1, j],
-      [i - 1, j + 1],
+      {x: i - 1, y: j},
+      {x: i - 1, y: j + 1},
+      {x: i - 1, y: j - 1},
       //second line
-      [i, j - 1],
-      [i, j + 1],
+      {x: i, y: j - 1},
+      {x: i, y: j + 1},
       //third line
-      [i + 1, j - 1],
-      [i + 1, j],
-      [i + 1, j + 1]
+      {x: i + 1, y: j - 1},
+      {x: i + 1, y: j},
+      {x: i + 1, y: j + 1}
     ];
   
     //filter elements not inside the grid
     return arrOfIndexesInsideGrid.filter(
-      (el) => el[0] > 0 && el[1] > 0 && el[0] < rows && el[1] < columns
-    );
+        ({x,y}) => x >= 0 && y >= 0 && x < rows && y < columns
+      );
   };
   
   export function generateGrid(minesCount = 3, rows = 5, colums = 5) {
     //generate grid
-    //calc adiacentBox // border or not border
-    let g = [],
-      hidden = [];
-  
+    //calc adiacentBox 
+    let g = [];
+    // Array.from({ length: rows }, () =>
+    //   Array.from({ length: columns }, (v,i) => { value: 0 , hidden: TileStatus.HIDDEN })
+    // );
     for (let i = 0; i < rows; i++) {
-      g[i] = new Array(colums).fill(0);
-      // hidden[i] = new Array(colums).fill(TileStatus.HIDDEN);
+      g[i] = Array.from({ length: colums }, (v,i) => ({ value: 0 , hidden: TileStatus.HIDDEN }));
     }
+
   
+
     let minesAssigned = 0;
     while (minesAssigned < minesCount) {
       //mines 3
       // console.table(g, "mines", minesAssigned);
       const x = getRandomInt(rows);
       const y = getRandomInt(colums);
-      if (g[x][y] !== TileStatus.MINE) {
-        g[x][y] = TileStatus.MINE;
+      if (g[x][y].value !== TileStatus.MINE) {
+        g[x][y].value = TileStatus.MINE;
         minesAssigned += 1;
       }
-    }
-    // precalculate nhood for non bombs CELLs
+    }  
+
+    //precalculate nhood for non bombs CELLs
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < colums; j++) {
-        if (g[i][j] === TileStatus.MINE) {
+        if (isBomb(g[i][j])) {
           break;
         }
-        //if i=0 or i=rown //missing  top or button
-        //if j=0 or j=coln //missing left or rignt
-        // (i,j, rows, columns) => [valid box elements] => filter (i,j => g[i][j] ===)
-        g[i][j] = adiacentBoxIndexesInsideGrid(i, j, rows, colums).filter((e) =>
-          isBomb(g[e[0]][e[1]])
-        ).length;
+   
+        // (i,j, rows, columns) => [valid box elements] => filter (i,j => isBomb(g[i][j]))
+        //filter box indexes outside of the array
+
+        g[i][j].value = adiacentBoxIndexesInsideGrid(i, j, rows, colums) 
+        // get only the mines 
+        .filter(({x,y}) =>
+          isBomb(g[x][y])
+        ).length
+
       }
     }
   
+    console.table(g.map(row => row.map(({value,hidden}) => value)))    
+
+
     return g;
   }
   
+
+  function checkWin(){
+      //if game over -- reveal board
+
+  }
